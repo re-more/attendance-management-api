@@ -1,0 +1,57 @@
+service: attendance-service-simple
+
+provider:
+  name: aws
+  role: LambdaRole
+  stage: ${opt:stage}
+
+custom: ${file(config.${self:provider.stage}.yml)}
+
+package:
+  individually: true
+
+functions:
+  attendancePost:
+    handler: remore.api.controller.App::handleRequest
+    events:
+      - http:
+          path: /attendance
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:custom.poolArn}
+            identitySource: method.request.header.Authorization
+    package:
+      artifact: "attendance-post/target/attendance-post-application-simple-0.1.0-SNAPSHOT.jar"
+    runtime: java8
+    memorySize: 512
+    timeout: 300
+    environment:
+      STAGE: ${opt:stage}
+resources:
+  Resources:
+    LambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /
+        RoleName: attendance-lambda-role-${opt:stage}
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+          - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+        Policies:
+          - PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - dynamodb:*
+                  Resource: '*'
+            PolicyName: remore-policy-for-lambda-${opt:stage}
