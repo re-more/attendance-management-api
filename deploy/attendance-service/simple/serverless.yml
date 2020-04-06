@@ -11,6 +11,23 @@ package:
   individually: true
 
 functions:
+  attendanceGet:
+    handler: remore.api.controller.App::handleRequest
+    events:
+      - http:
+          path: /attendance
+          method: get
+          cors: true
+          authorizer:
+            arn: ${self:custom.poolArn}
+            identitySource: method.request.header.Authorization
+    package:
+      artifact: "attendance-get/target/attendance-get-application-simple-0.1.0-SNAPSHOT.jar"
+    runtime: java8
+    memorySize: 512
+    timeout: 300
+    environment:
+      STAGE: ${opt:stage}
   attendancePost:
     handler: remore.api.controller.App::handleRequest
     events:

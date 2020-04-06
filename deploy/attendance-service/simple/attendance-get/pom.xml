@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pigumer.re-more.api</groupId>
-    <artifactId>attendance-post-application-simple</artifactId>
+    <artifactId>attendance-get-application-simple</artifactId>
     <version>0.1.0-SNAPSHOT</version>
-    <name>attendance-post-application-simple</name>
+    <name>attendance-get-application-simple</name>
 
     <packaging>jar</packaging>
 
@@ -43,7 +43,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>attendance-post-controller-simple</artifactId>
+            <artifactId>attendance-get-controller-simple</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
