@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class Handler {
 
@@ -18,6 +19,11 @@ public class Handler {
     }
 
     protected OutputObject handle(InputObject input, Context context) throws IOException {
-        return null;
+        Result result = new Result();
+        result.setData(Collections.emptyList());
+        OutputObject output = new OutputObject();
+        output.setStatusCode(200);
+        output.setBody(mapper.writeValueAsString(result));
+        return output;
     }
 }
