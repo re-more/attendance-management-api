@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Handler {
 
@@ -17,6 +19,13 @@ public class Handler {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    private Map<String, String> corsHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Content-Type", "application/json");
+        return headers;
+    }
+
     protected OutputObject handle(InputObject input, Context context) throws IOException {
         Result result = new Result();
         result.setId("1");
@@ -26,6 +35,7 @@ public class Handler {
         result.setMemo("memo");
         OutputObject output = new OutputObject();
         output.setStatusCode(200);
+        output.setHeaders(corsHeaders());
         output.setBody(mapper.writeValueAsString(result));
         return output;
     }
